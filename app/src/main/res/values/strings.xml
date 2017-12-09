@@ -2,4 +2,8 @@
     <string name="app_name">TestMap</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="login_button">Log in</string>
+    <string name="sign_up_button">Add user</string>
+    <string name="name">Name</string>
+    <string name="textview">TextView</string>
 </resources>

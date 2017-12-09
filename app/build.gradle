@@ -27,4 +27,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'ru.yandex:yandexmapkit:2.5.4@aar'
-}
+    compile 'com.google.dagger:dagger:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    }

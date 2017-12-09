@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,9 +34,21 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
+
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
+            case 1: {
+                return inflater.inflate(R.layout.fragment_map, container, false);
+            }
+            case 2: {
+                return inflater.inflate(R.layout.fragment_list, container, false);
+            }
+
+            default: {
+                return inflater.inflate(R.layout.fragment_error, container, false);
+            }
+        }
+
     }
+
+
 }
