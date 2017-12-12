@@ -2,13 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.prygoon.testmap.PlaceholderFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.prygoon.testmap.fragments.MapFragment"
+    android:orientation="vertical">
 
 
     <ru.yandex.yandexmapkit.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="0.0001px"
         android:apiKey="ShrJeM8QCQ-B4nwrJQ79jbjXJJo5IK7n0j2IAFIMhtic5mqxuPeCdycUf-~AkQsVrwxBH5mZsuJnaaDNGWRNVuZxkLOCxaRwq6~xhjuTqpA=" />
 
     <!--<TextView
