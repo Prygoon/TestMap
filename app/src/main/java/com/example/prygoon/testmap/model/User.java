@@ -7,15 +7,18 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Unique;
 
+import java.io.Serializable;
 import java.util.List;
+
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
+@SuppressWarnings("serial")
 @Entity(active = true, nameInDb = "USERS")
-public class User {
+public class User implements Serializable {
 
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
 
     @NotNull
     @Unique
@@ -30,16 +33,20 @@ public class User {
     })
     private List<Coordinates> coordinates;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1507654846)
     private transient UserDao myDao;
 
-    @Generated(hash = 926996454)
-    public User(long id, @NotNull String name, @NotNull String searchName) {
+    @Generated(hash = 644653508)
+    public User(Long id, @NotNull String name, @NotNull String searchName) {
         this.id = id;
         this.name = name;
         this.searchName = searchName;
@@ -49,11 +56,11 @@ public class User {
     public User() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -95,7 +102,9 @@ public class User {
         return coordinates;
     }
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     @Generated(hash = 1751045214)
     public synchronized void resetCoordinates() {
         coordinates = null;
@@ -137,7 +146,9 @@ public class User {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 2059241980)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;

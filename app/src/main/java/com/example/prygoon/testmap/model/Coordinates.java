@@ -10,7 +10,7 @@ import org.greenrobot.greendao.DaoException;
 public class Coordinates {
 
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
 
     @NotNull
     private double latitude;
@@ -28,8 +28,8 @@ public class Coordinates {
     @Generated(hash = 1936638627)
     private transient CoordinatesDao myDao;
 
-    @Generated(hash = 2085079341)
-    public Coordinates(long id, double latitude, double longitude, long userId) {
+    @Generated(hash = 1179041713)
+    public Coordinates(Long id, double latitude, double longitude, long userId) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -40,11 +40,11 @@ public class Coordinates {
     public Coordinates() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -114,4 +114,5 @@ public class Coordinates {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCoordinatesDao() : null;
     }
+
 }

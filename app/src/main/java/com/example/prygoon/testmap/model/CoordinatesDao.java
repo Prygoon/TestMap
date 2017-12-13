@@ -25,7 +25,7 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Latitude = new Property(1, double.class, "latitude", false, "LATITUDE");
         public final static Property Longitude = new Property(2, double.class, "longitude", false, "LONGITUDE");
         public final static Property UserId = new Property(3, long.class, "userId", false, "USER_ID");
@@ -48,7 +48,7 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"COORDINATES\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"LATITUDE\" REAL NOT NULL ," + // 1: latitude
                 "\"LONGITUDE\" REAL NOT NULL ," + // 2: longitude
                 "\"USER_ID\" INTEGER NOT NULL );"); // 3: userId
@@ -63,7 +63,11 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Coordinates entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindDouble(2, entity.getLatitude());
         stmt.bindDouble(3, entity.getLongitude());
         stmt.bindLong(4, entity.getUserId());
@@ -72,7 +76,11 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Coordinates entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindDouble(2, entity.getLatitude());
         stmt.bindDouble(3, entity.getLongitude());
         stmt.bindLong(4, entity.getUserId());
@@ -86,13 +94,13 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Coordinates readEntity(Cursor cursor, int offset) {
         Coordinates entity = new Coordinates( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getDouble(offset + 1), // latitude
             cursor.getDouble(offset + 2), // longitude
             cursor.getLong(offset + 3) // userId
@@ -102,7 +110,7 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Coordinates entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setLatitude(cursor.getDouble(offset + 1));
         entity.setLongitude(cursor.getDouble(offset + 2));
         entity.setUserId(cursor.getLong(offset + 3));
@@ -125,7 +133,7 @@ public class CoordinatesDao extends AbstractDao<Coordinates, Long> {
 
     @Override
     public boolean hasKey(Coordinates entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

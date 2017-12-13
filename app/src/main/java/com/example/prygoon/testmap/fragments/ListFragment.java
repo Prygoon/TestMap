@@ -20,7 +20,7 @@ public class ListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
 
         ListAdapter listAdapter = new ListAdapter();
         recyclerView.setAdapter(listAdapter);

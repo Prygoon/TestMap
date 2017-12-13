@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.prygoon.testmap.MapActivity;
 import com.example.prygoon.testmap.R;
+import com.example.prygoon.testmap.model.Coordinates;
+
+import static com.example.prygoon.testmap.activities.MapActivity.*;
 
 public class ListAdapter extends RecyclerView.Adapter {
     @Override
@@ -18,12 +20,12 @@ public class ListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ListViewHolder)holder).bindView(position);
+        ((ListViewHolder) holder).bindView(position);
     }
 
     @Override
     public int getItemCount() {
-        return MapActivity.items.length;
+        return coordinates.size();
     }
 
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -36,7 +38,8 @@ public class ListAdapter extends RecyclerView.Adapter {
         }
 
         public void bindView(int position) {
-            mItemText.setText(MapActivity.items[position]);
+            Coordinates item = coordinates.get(position);
+            mItemText.setText(String.format("%s %s", String.valueOf(item.getLatitude()), item.getLongitude()));
         }
 
         @Override
