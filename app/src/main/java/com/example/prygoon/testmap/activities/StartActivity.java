@@ -15,7 +15,6 @@ import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.model.User;
 import com.example.prygoon.testmap.model.UserDao;
 
-import org.greenrobot.greendao.database.Database;
 
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,7 +24,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private Button mAddUserButton;
     private DataManager mDataManager;
     private User mUser;
-    private Database mDatabase;
+    //
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mLoginButton = findViewById(R.id.login_button);
         mAddUserButton = findViewById(R.id.add_user_button);
         mDataManager = DataManager.getInstance(this);
-        mDatabase = mDataManager.getDatabase();
+        //mDatabase = mDataManager.getDatabase();
 
         mAddUserButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
@@ -52,7 +51,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 User user = new User(null, username, username.toUpperCase());
 
                 try {
-                    mDataManager.getDaoSession().insert(user);
+                    mDataManager.getDaoSession().getUserDao().insert(user);
                     Toast.makeText(getApplicationContext(), R.string.sucsess_input, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteConstraintException ex) {
                     Toast.makeText(getApplicationContext(), R.string.wrong_input, Toast.LENGTH_SHORT).show();

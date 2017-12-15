@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="0.0001px"
-        android:apiKey="ShrJeM8QCQ-B4nwrJQ79jbjXJJo5IK7n0j2IAFIMhtic5mqxuPeCdycUf-~AkQsVrwxBH5mZsuJnaaDNGWRNVuZxkLOCxaRwq6~xhjuTqpA=" />
+        android:apiKey="ShrJeM8QCQ-B4nwrJQ79jbjXJJo5IK7n0j2IAFIMhtic5mqxuPeCdycUf-~AkQsVrwxBH5mZsuJnaaDNGWRNVuZxkLOCxaRwq6~xhjuTqpA=">
+
+    </ru.yandex.yandexmapkit.MapView>
 
     <!--<TextView
         android:id="@+id/section_label"

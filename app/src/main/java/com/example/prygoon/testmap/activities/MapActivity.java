@@ -3,16 +3,17 @@ package com.example.prygoon.testmap.activities;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.example.prygoon.testmap.DataManager;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.adapters.PagerAdapter;
 import com.example.prygoon.testmap.model.Coordinates;
+import com.example.prygoon.testmap.model.CoordinatesDao;
 import com.example.prygoon.testmap.model.User;
 
 import org.greenrobot.greendao.DaoException;
@@ -24,8 +25,8 @@ public class MapActivity extends AppCompatActivity {
 
     private DataManager mDataManager;
     private PagerAdapter mPagerAdapter;
-    private RecyclerView mRecyclerView;
-    private User mUser;
+    //private RecyclerView mRecyclerView;
+    static private User mUser;
     private Intent intent;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -42,14 +43,18 @@ public class MapActivity extends AppCompatActivity {
         mUser = (User) intent.getSerializableExtra("user");
 
         try {
-            coordinates = mUser.getCoordinates();
+            coordinates = mDataManager.getDaoSession()
+                    .getCoordinatesDao()
+                    .queryBuilder()
+                    .where(CoordinatesDao.Properties.UserId.eq(mUser.getId()))
+                    .list();
         } catch (DaoException ex) {
             Toast.makeText(this, R.string.empty_coords, Toast.LENGTH_SHORT).show();
         }
 
 
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
 
 
         //tab id
@@ -64,6 +69,10 @@ public class MapActivity extends AppCompatActivity {
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
+    }
+
+    static public User getmUser() {
+        return mUser;
     }
 
     @Override
