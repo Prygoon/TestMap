@@ -1,7 +1,5 @@
 package com.example.prygoon.testmap.model;
 
-import android.os.Parcelable;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;

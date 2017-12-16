@@ -3,10 +3,8 @@ package com.example.prygoon.testmap.activities;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.example.prygoon.testmap.adapters.ListAdapter;
 import com.example.prygoon.testmap.utils.DataManager;
