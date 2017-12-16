@@ -6,31 +6,29 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.example.prygoon.testmap.DataManager;
+import com.example.prygoon.testmap.adapters.ListAdapter;
+import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.adapters.PagerAdapter;
+import com.example.prygoon.testmap.activities.fragments.ListFragment;
+import com.example.prygoon.testmap.activities.fragments.MapFragment;
 import com.example.prygoon.testmap.model.Coordinates;
 import com.example.prygoon.testmap.model.CoordinatesDao;
 import com.example.prygoon.testmap.model.User;
+import com.example.prygoon.testmap.utils.ViewPagerMovement;
 
 import org.greenrobot.greendao.DaoException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements ViewPagerMovement {
 
     private DataManager mDataManager;
-    private PagerAdapter mPagerAdapter;
-    //private RecyclerView mRecyclerView;
-    static private User mUser;
-    private Intent intent;
+    private User mUser;
     private ViewPager mViewPager;
-    private TabLayout mTabLayout;
-    public static List<Coordinates> coordinates = new ArrayList<>();
+    private static List<Coordinates> coordinates;
 
 
     @Override
@@ -38,45 +36,72 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        intent = getIntent();
+        Intent intent = getIntent();
         mDataManager = DataManager.getInstance(this);
         mUser = (User) intent.getSerializableExtra("user");
 
         try {
-            coordinates = mDataManager.getDaoSession()
-                    .getCoordinatesDao()
-                    .queryBuilder()
-                    .where(CoordinatesDao.Properties.UserId.eq(mUser.getId()))
-                    .list();
+            coordinates = getCoordinatesFromDB();
         } catch (DaoException ex) {
             Toast.makeText(this, R.string.empty_coords, Toast.LENGTH_SHORT).show();
         }
 
 
-        /*Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-
-
-        //tab id
-        mTabLayout = findViewById(R.id.tabs);
-        //add tabs
-        mTabLayout.addTab(mTabLayout.newTab().setText("Map"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Coords"));
-
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        setupViewPager(mViewPager);
 
+        //tab id
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        /*mListFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+        mRecyclerView = ((RecyclerView) mListFragment.getRecyclerView());*/
+        /*((TextView) frag1.getView().findViewById(R.id.text))
+                .setText("Access to Fragment 1 from Activity");*/
     }
 
-    static public User getmUser() {
+    private void setupViewPager(ViewPager viewPager) {
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+        ListAdapter listAdapter = new ListAdapter();
+        //listAdapter.setDataTransporter(this);
+        MapFragment mapFragment = new MapFragment();
+        ListFragment listFragment = new ListFragment();
+        listFragment.setPolyLineDrawer(mapFragment);
+        listFragment.setViewPagerMovement(this);
+        listFragment.setListAdapter(listAdapter);
+        mapFragment.setRecycleListRefresher(listFragment);
+        adapter.addFragment(mapFragment, "Карта");
+        adapter.addFragment(listFragment, "Координаты");
+        viewPager.setAdapter(adapter);
+    }
+
+
+    public static List<Coordinates> getCoordinates() {
+        return coordinates;
+    }
+
+    private List<Coordinates> getCoordinatesFromDB() throws DaoException {
+        return mDataManager.getDaoSession()
+                .getCoordinatesDao()
+                .queryBuilder()
+                .where(CoordinatesDao.Properties.UserId.eq(mUser.getId()))
+                .list();
+    }
+
+    public User getUser() {
         return mUser;
     }
+
 
     @Override
     public void onBackPressed() {
 
     }
+
+    @Override
+    public void moveToMapFragment() {
+        mViewPager.setCurrentItem(0);
+    }
+
 }

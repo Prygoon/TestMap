@@ -8,4 +8,5 @@
     <string name="wrong_input">Пользователь уже существует</string>
     <string name="empty_coords">У пользователя еще нет координат</string>
     <string name="save_coords">Сохранить кординаты?</string>
+    <string name="build_path_button">Построить маршрут</string>
 </resources>

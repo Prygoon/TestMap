@@ -1,4 +1,4 @@
-package com.example.prygoon.testmap;
+package com.example.prygoon.testmap.utils;
 
 import android.content.Context;
 
@@ -12,7 +12,6 @@ public class DataManager {
 
     private static DataManager instance = null;
     private static DaoSession mDaoSession;
-    private static Database db;
 
     private DataManager() {
 
@@ -22,7 +21,7 @@ public class DataManager {
         if (instance == null) {
             instance = new DataManager();
             DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "testmap_db");
-            db = helper.getWritableDb();
+            Database db = helper.getWritableDb();
             mDaoSession = new DaoMaster(db).newSession();
         }
         return instance;
@@ -32,7 +31,4 @@ public class DataManager {
         return mDaoSession;
     }
 
-    public Database getDatabase() {
-        return db;
-    }
 }

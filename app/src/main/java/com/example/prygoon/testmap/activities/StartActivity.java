@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.prygoon.testmap.DataManager;
+import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.model.User;
 import com.example.prygoon.testmap.model.UserDao;
@@ -20,11 +20,8 @@ import com.example.prygoon.testmap.model.UserDao;
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mEditText;
-    private Button mLoginButton;
-    private Button mAddUserButton;
     private DataManager mDataManager;
-    private User mUser;
-    //
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,13 +29,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_start);
 
         mEditText = findViewById(R.id.editText);
-        mLoginButton = findViewById(R.id.login_button);
-        mAddUserButton = findViewById(R.id.add_user_button);
         mDataManager = DataManager.getInstance(this);
-        //mDatabase = mDataManager.getDatabase();
 
-        mAddUserButton.setOnClickListener(this);
-        mLoginButton.setOnClickListener(this);
+        Button loginButton = findViewById(R.id.login_button);
+        Button addUserButton = findViewById(R.id.add_user_button);
+
+        addUserButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 String username = mEditText.getText().toString();
 
                 try {
-                    mUser = mDataManager.getDaoSession().getUserDao()
+                    User mUser = mDataManager.getDaoSession().getUserDao()
                             .queryBuilder()
                             .where(UserDao.Properties.SearchName.eq(username.toUpperCase()))
                             .unique();

@@ -1,5 +1,7 @@
 package com.example.prygoon.testmap.model;
 
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -20,11 +22,15 @@ public class Coordinates {
 
     private long userId;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1936638627)
     private transient CoordinatesDao myDao;
 
@@ -108,7 +114,9 @@ public class Coordinates {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 11123800)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
