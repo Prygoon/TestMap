@@ -16,7 +16,6 @@ import com.example.prygoon.testmap.model.User;
 import com.example.prygoon.testmap.model.UserDao;
 
 
-
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mEditText;
@@ -69,7 +68,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                         intent.putExtra("user", mUser);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Пользователя не существует", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.no_user_found, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {

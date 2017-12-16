@@ -43,7 +43,7 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
         try {
             coordinates = getCoordinatesFromDB();
         } catch (DaoException ex) {
-            Toast.makeText(this, R.string.empty_coords, Toast.LENGTH_SHORT).show();
+            ex.printStackTrace();
         }
 
 
@@ -55,10 +55,6 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        /*mListFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
-        mRecyclerView = ((RecyclerView) mListFragment.getRecyclerView());*/
-        /*((TextView) frag1.getView().findViewById(R.id.text))
-                .setText("Access to Fragment 1 from Activity");*/
     }
 
     private void setupViewPager(ViewPager viewPager) {

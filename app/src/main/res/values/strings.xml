@@ -6,7 +6,11 @@
     <string name="name">Name</string>
     <string name="sucsess_input">Пользователь добавлен</string>
     <string name="wrong_input">Пользователь уже существует</string>
+    <string name="no_user_found">Пользователя не существует</string>
     <string name="empty_coords">У пользователя еще нет координат</string>
     <string name="save_coords">Сохранить кординаты?</string>
+    <string name="coords_saved">Координаты сохранены</string>
     <string name="build_path_button">Построить маршрут</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

@@ -83,15 +83,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
                         mBuilder = new AlertDialog.Builder(getContext());
                         mBuilder.setMessage(R.string.save_coords);
                         mBuilder.setCancelable(false);
-                        mBuilder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                        mBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Coordinates coordinates = new Coordinates(null, mLatLng.latitude, mLatLng.longitude, mUser.getId());
                                 mRecycleListItemAdder.addItem(coordinates);
-                                Toast.makeText(getContext(), "Координаты сохранены", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.coords_saved, Toast.LENGTH_SHORT).show();
                             }
                         });
-                        mBuilder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                        mBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
@@ -143,9 +143,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
         for (int i = 0; i < coordinates.size(); i++) {
             latLngs.add(new LatLng(coordinates.get(i).getLatitude(), coordinates.get(i).getLongitude()));
         }
-
-        googleMap.addPolyline(new PolylineOptions().addAll(latLngs));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(latLngs.size() / 2), 10));
+        googleMap.clear();
+        if (latLngs.size() > 1) {
+            googleMap.addPolyline(new PolylineOptions().addAll(latLngs));
+            googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Начало"));
+            googleMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("Конец"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
+        } else {
+            Toast.makeText(getContext(), R.string.empty_coords, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void setRecycleListRefresher(RecycleListItemAdder mRecycleListItemAdder) {
