@@ -5,7 +5,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.prygoon.testmap.MapApplication;
 import com.example.prygoon.testmap.adapters.ListAdapter;
 import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.R;
@@ -38,6 +42,21 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
         mDataManager = DataManager.getInstance(this);
         mUser = (User) intent.getSerializableExtra("user");
 
+        TextView currentUser = findViewById(R.id.current_user);
+        currentUser.setText(R.string.current_user_text);
+        currentUser.append(" ");
+        currentUser.append(mUser.getName());
+
+        Button logOutButton = findViewById(R.id.logout_button);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mUser = null;
+                Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                startActivity(intent);
+            }
+        });
+
         try {
             coordinates = getCoordinatesFromDB();
         } catch (DaoException ex) {
@@ -58,9 +77,9 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
     private void setupViewPager(ViewPager viewPager) {
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         ListAdapter listAdapter = new ListAdapter();
-        //listAdapter.setDataTransporter(this);
         MapFragment mapFragment = new MapFragment();
         ListFragment listFragment = new ListFragment();
+        listAdapter.setRecyclerListItemDeleter(listFragment);
         listFragment.setPolyLineDrawer(mapFragment);
         listFragment.setViewPagerMovement(this);
         listFragment.setListAdapter(listAdapter);
@@ -90,7 +109,27 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
 
     @Override
     public void onBackPressed() {
-
+        MapApplication.exit(this);
+        /*Toast.makeText(this, R.string.back_pressed_once, Toast.LENGTH_SHORT).show();
+        if (++backPressedCount > 1) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.close_app);
+            builder.setCancelable(false);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finishAffinity();
+                }
+            });
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    backPressedCount = 0;
+                    dialogInterface.cancel();
+                }
+            });
+            builder.create().show();
+        }*/
     }
 
     @Override

@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.prygoon.testmap.MapApplication;
+import com.example.prygoon.testmap.model.DaoSession;
 import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.model.User;
@@ -43,14 +45,21 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.add_user_button: {
 
+                User user = null;
                 String username = mEditText.getText().toString();
-                User user = new User(null, username, username.toUpperCase());
+                if (!username.equals("")) {
+                    user = new User(null, username, username.toUpperCase());
+                }
 
                 try {
-                    mDataManager.getDaoSession().getUserDao().insert(user);
+                    DaoSession session = mDataManager.getDaoSession();
+                    session.getUserDao().insert(user);
+                    session.clear();
                     Toast.makeText(getApplicationContext(), R.string.sucsess_input, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteConstraintException ex) {
                     Toast.makeText(getApplicationContext(), R.string.wrong_input, Toast.LENGTH_SHORT).show();
+                } catch (NullPointerException ex) {
+                    Toast.makeText(this, R.string.empty_user_name, Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
@@ -59,10 +68,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 String username = mEditText.getText().toString();
 
                 try {
-                    User mUser = mDataManager.getDaoSession().getUserDao()
+                    DaoSession session = mDataManager.getDaoSession();
+                    User mUser = session.getUserDao()
                             .queryBuilder()
                             .where(UserDao.Properties.SearchName.eq(username.toUpperCase()))
                             .unique();
+                    session.clear();
                     if (mUser != null) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("user", mUser);
@@ -77,6 +88,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 break;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MapApplication.exit(this);
     }
 }
 

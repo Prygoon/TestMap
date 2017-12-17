@@ -1,16 +1,23 @@
 <resources>
     <string name="app_name">TestMap</string>
     <string name="action_settings">Settings</string>
-    <string name="login_button">Login</string>
-    <string name="sign_up_button">Add user</string>
-    <string name="name">Name</string>
+    <string name="login_button">Войти</string>
+    <string name="sign_up_button">Добавить</string>
+    <string name="name">Введите имя</string>
     <string name="sucsess_input">Пользователь добавлен</string>
     <string name="wrong_input">Пользователь уже существует</string>
     <string name="no_user_found">Пользователя не существует</string>
-    <string name="empty_coords">У пользователя еще нет координат</string>
+    <string name="empty_user_name">Имя пользователя не может быть пустым</string>
+    <string name="empty_coords">У вас еще нет сохранённых координат</string>
+    <string name="only_one_coord">У вас всего одна сохранённая точка</string>
     <string name="save_coords">Сохранить координаты?</string>
+    <string name="delete_coords">Удалить координаты?</string>
     <string name="coords_saved">Координаты сохранены</string>
-    <string name="build_path_button">Построить маршрут</string>
+    <string name="build_path_button">Построить линию</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="current_user_text">Вы:</string>
+    <string name="back_pressed_once">Нажмите "Назад" еще раз, чтобы закрыть приложение</string>
+    <string name="close_app">Закрыть приложение?</string>
+    <string name="logout_btn">Выйти</string>
 </resources>

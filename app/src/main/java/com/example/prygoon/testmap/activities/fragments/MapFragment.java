@@ -18,7 +18,7 @@ import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.activities.MapActivity;
 import com.example.prygoon.testmap.model.Coordinates;
 import com.example.prygoon.testmap.utils.PolyLineDrawer;
-import com.example.prygoon.testmap.utils.RecycleListItemAdder;
+import com.example.prygoon.testmap.utils.RecyclerListItemAdder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,7 +36,7 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLineDrawer {
 
-    private RecycleListItemAdder mRecycleListItemAdder;
+    private RecyclerListItemAdder mRecyclerListItemAdder;
     private AlertDialog.Builder mBuilder;
     private MapView mMapView;
     private GoogleMap googleMap;
@@ -62,13 +62,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(55.751970, 38.008176)).zoom(13).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(55.751970, 38.008176)).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void onMapLongClick(LatLng latLng) {
                         googleMap.clear();
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                         mLatLng = new LatLng(latLng.latitude, latLng.longitude);
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(mLatLng).title("Нажми для сохранения").snippet(String.format("%.7f  %.7f", latLng.latitude, latLng.longitude));
@@ -79,25 +80,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
                 googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
-
-                        mBuilder = new AlertDialog.Builder(getContext());
-                        mBuilder.setMessage(R.string.save_coords);
-                        mBuilder.setCancelable(false);
-                        mBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Coordinates coordinates = new Coordinates(null, mLatLng.latitude, mLatLng.longitude, mUser.getId());
-                                mRecycleListItemAdder.addItem(coordinates);
-                                Toast.makeText(getContext(), R.string.coords_saved, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        mBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                        mBuilder.create().show();
+                        if (!(marker.getTitle().equals("Начало") || marker.getTitle().equals("Конец") || marker.getTitle().equals("Точка"))) {
+                            mBuilder = new AlertDialog.Builder(getContext());
+                            mBuilder.setMessage(R.string.save_coords);
+                            mBuilder.setCancelable(false);
+                            mBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Coordinates coordinates = new Coordinates(null, mLatLng.latitude, mLatLng.longitude, mUser.getId());
+                                    mRecyclerListItemAdder.addItem(coordinates);
+                                    Toast.makeText(getContext(), R.string.coords_saved, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            mBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            mBuilder.create().show();
+                        }
                     }
                 });
             }
@@ -145,16 +147,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
         }
         googleMap.clear();
         if (latLngs.size() > 1) {
-            googleMap.addPolyline(new PolylineOptions().addAll(latLngs));
+            googleMap.addPolyline(new PolylineOptions().addAll(latLngs).width(5f));
             googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Начало"));
             googleMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("Конец"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
+        } else if (latLngs.size() == 1) {
+            googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Точка"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
+            Toast.makeText(getContext(), R.string.only_one_coord, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), R.string.empty_coords, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void setRecycleListRefresher(RecycleListItemAdder mRecycleListItemAdder) {
-        this.mRecycleListItemAdder = mRecycleListItemAdder;
+    public void setRecycleListRefresher(RecyclerListItemAdder mRecyclerListItemAdder) {
+        this.mRecyclerListItemAdder = mRecyclerListItemAdder;
     }
 }

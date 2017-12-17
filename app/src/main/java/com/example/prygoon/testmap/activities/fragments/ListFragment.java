@@ -1,5 +1,7 @@
 package com.example.prygoon.testmap.activities.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,14 +16,17 @@ import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.activities.MapActivity;
 import com.example.prygoon.testmap.adapters.ListAdapter;
 import com.example.prygoon.testmap.model.Coordinates;
+import com.example.prygoon.testmap.model.CoordinatesDao;
+import com.example.prygoon.testmap.model.DaoSession;
 import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.utils.PolyLineDrawer;
-import com.example.prygoon.testmap.utils.RecycleListItemAdder;
+import com.example.prygoon.testmap.utils.RecyclerListItemAdder;
+import com.example.prygoon.testmap.utils.RecyclerListItemDeleter;
 import com.example.prygoon.testmap.utils.ViewPagerMovement;
 
 import java.util.List;
 
-public class ListFragment extends Fragment implements View.OnClickListener, RecycleListItemAdder {
+public class ListFragment extends Fragment implements View.OnClickListener, RecyclerListItemAdder, RecyclerListItemDeleter {
 
     private PolyLineDrawer mPolyLineDrawer;
     private ViewPagerMovement mViewPagerMovement;
@@ -54,11 +59,48 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
     public void addItem(Coordinates coords) {
 
         mCoordinatesList.add(coords);
-        mDataManager.getDaoSession().getCoordinatesDao().insert(coords);
+        DaoSession session = mDataManager.getDaoSession();
+        session.getCoordinatesDao().insert(coords);
+        session.clear();
 
         if (mRecyclerView != null) {
             mRecyclerView.getAdapter().notifyItemInserted(mCoordinatesList.size() - 1);
         }
+
+    }
+
+    @Override
+    public void deleteItem(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.delete_coords);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Long coordId = mCoordinatesList.get(position).getId();
+                mCoordinatesList.remove(position);
+
+                DaoSession session = mDataManager.getDaoSession();
+
+                session.getCoordinatesDao()
+                        .queryBuilder()
+                        .where(CoordinatesDao.Properties.Id.eq(coordId))
+                        .buildDelete()
+                        .executeDeleteWithoutDetachingEntities();
+                session.clear();
+
+                if (mRecyclerView != null) {
+                    mRecyclerView.getAdapter().notifyItemRemoved(position);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.create().show();
 
     }
 
@@ -83,5 +125,4 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
     public void setListAdapter(ListAdapter mListAdapter) {
         this.mListAdapter = mListAdapter;
     }
-
 }

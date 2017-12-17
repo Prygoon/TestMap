@@ -10,13 +10,16 @@ import android.widget.TextView;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.activities.MapActivity;
 import com.example.prygoon.testmap.model.Coordinates;
+import com.example.prygoon.testmap.utils.RecyclerListItemDeleter;
 
 
 public class ListAdapter extends RecyclerView.Adapter {
+    private RecyclerListItemDeleter mRecyclerListItemDeleter;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
+
         return new ListViewHolder(view);
     }
 
@@ -30,19 +33,29 @@ public class ListAdapter extends RecyclerView.Adapter {
         return MapActivity.getCoordinates().size();
     }
 
-    private class ListViewHolder extends RecyclerView.ViewHolder {
+    public void setRecyclerListItemDeleter(RecyclerListItemDeleter mRecyclerListItemDeleter) {
+        this.mRecyclerListItemDeleter = mRecyclerListItemDeleter;
+    }
+
+    private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         private TextView mItemText;
 
         ListViewHolder(View itemView) {
             super(itemView);
             mItemText = itemView.findViewById(R.id.itemText);
+            mItemText.setOnLongClickListener(this);
         }
 
         @SuppressLint("DefaultLocale")
         void bindView(int position) {
             Coordinates item = MapActivity.getCoordinates().get(position);
-            mItemText.setText(String.format("%s. Широта %.7f. Долгота %.7f", position + 1, item.getLatitude(), item.getLongitude()));
+            mItemText.setText(String.format("Широта %.7f. Долгота %.7f", item.getLatitude(), item.getLongitude()));
         }
 
+        @Override
+        public boolean onLongClick(View view) {
+            mRecyclerListItemDeleter.deleteItem(getAdapterPosition());
+            return true;
+        }
     }
 }
