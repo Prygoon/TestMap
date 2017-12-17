@@ -18,7 +18,7 @@ import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.activities.MapActivity;
 import com.example.prygoon.testmap.model.Coordinates;
 import com.example.prygoon.testmap.utils.PolyLineDrawer;
-import com.example.prygoon.testmap.utils.RecyclerListItemAdder;
+import com.example.prygoon.testmap.utils.RecyclerListItemChangeable;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,7 +36,7 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLineDrawer {
 
-    private RecyclerListItemAdder mRecyclerListItemAdder;
+    private RecyclerListItemChangeable mRecyclerListItemChangeable;
     private AlertDialog.Builder mBuilder;
     private MapView mMapView;
     private GoogleMap googleMap;
@@ -88,7 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Coordinates coordinates = new Coordinates(null, mLatLng.latitude, mLatLng.longitude, mUser.getId());
-                                    mRecyclerListItemAdder.addItem(coordinates);
+                                    mRecyclerListItemChangeable.addItem(coordinates);
                                     Toast.makeText(getContext(), R.string.coords_saved, Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -147,7 +147,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
         }
         googleMap.clear();
         if (latLngs.size() > 1) {
-            googleMap.addPolyline(new PolylineOptions().addAll(latLngs).width(5f));
+            googleMap.addPolyline(new PolylineOptions().addAll(latLngs).width(6f));
             googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Начало"));
             googleMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("Конец"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
@@ -160,7 +160,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
         }
     }
 
-    public void setRecycleListRefresher(RecyclerListItemAdder mRecyclerListItemAdder) {
-        this.mRecyclerListItemAdder = mRecyclerListItemAdder;
+    public void setRecycleListItemChangeable(RecyclerListItemChangeable mRecyclerListItemChangeable) {
+        this.mRecyclerListItemChangeable = mRecyclerListItemChangeable;
     }
 }

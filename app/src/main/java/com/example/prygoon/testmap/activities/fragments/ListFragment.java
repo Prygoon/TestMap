@@ -20,13 +20,12 @@ import com.example.prygoon.testmap.model.CoordinatesDao;
 import com.example.prygoon.testmap.model.DaoSession;
 import com.example.prygoon.testmap.utils.DataManager;
 import com.example.prygoon.testmap.utils.PolyLineDrawer;
-import com.example.prygoon.testmap.utils.RecyclerListItemAdder;
-import com.example.prygoon.testmap.utils.RecyclerListItemDeleter;
+import com.example.prygoon.testmap.utils.RecyclerListItemChangeable;
 import com.example.prygoon.testmap.utils.ViewPagerMovement;
 
 import java.util.List;
 
-public class ListFragment extends Fragment implements View.OnClickListener, RecyclerListItemAdder, RecyclerListItemDeleter {
+public class ListFragment extends Fragment implements View.OnClickListener, RecyclerListItemChangeable {
 
     private PolyLineDrawer mPolyLineDrawer;
     private ViewPagerMovement mViewPagerMovement;

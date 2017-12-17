@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.example.prygoon.testmap.R;
 import com.example.prygoon.testmap.activities.MapActivity;
 import com.example.prygoon.testmap.model.Coordinates;
-import com.example.prygoon.testmap.utils.RecyclerListItemDeleter;
+import com.example.prygoon.testmap.utils.RecyclerListItemChangeable;
 
 
 public class ListAdapter extends RecyclerView.Adapter {
-    private RecyclerListItemDeleter mRecyclerListItemDeleter;
+    private RecyclerListItemChangeable mRecyclerListItemChangeable;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,8 +33,8 @@ public class ListAdapter extends RecyclerView.Adapter {
         return MapActivity.getCoordinates().size();
     }
 
-    public void setRecyclerListItemDeleter(RecyclerListItemDeleter mRecyclerListItemDeleter) {
-        this.mRecyclerListItemDeleter = mRecyclerListItemDeleter;
+    public void setRecyclerListItemChangeable(RecyclerListItemChangeable mRecyclerListItemChangeable) {
+        this.mRecyclerListItemChangeable = mRecyclerListItemChangeable;
     }
 
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
@@ -54,7 +54,7 @@ public class ListAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onLongClick(View view) {
-            mRecyclerListItemDeleter.deleteItem(getAdapterPosition());
+            mRecyclerListItemChangeable.deleteItem(getAdapterPosition());
             return true;
         }
     }

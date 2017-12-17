@@ -79,11 +79,11 @@ public class MapActivity extends AppCompatActivity implements ViewPagerMovement 
         ListAdapter listAdapter = new ListAdapter();
         MapFragment mapFragment = new MapFragment();
         ListFragment listFragment = new ListFragment();
-        listAdapter.setRecyclerListItemDeleter(listFragment);
+        listAdapter.setRecyclerListItemChangeable(listFragment);
         listFragment.setPolyLineDrawer(mapFragment);
         listFragment.setViewPagerMovement(this);
         listFragment.setListAdapter(listAdapter);
-        mapFragment.setRecycleListRefresher(listFragment);
+        mapFragment.setRecycleListItemChangeable(listFragment);
         adapter.addFragment(mapFragment, "Карта");
         adapter.addFragment(listFragment, "Координаты");
         viewPager.setAdapter(adapter);
