@@ -141,23 +141,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, PolyLin
 
     @Override
     public void drawPolyLine(List<Coordinates> coordinates) {
-        List<LatLng> latLngs = new ArrayList<>();
+        final List<LatLng> latLngs = new ArrayList<>();
         for (int i = 0; i < coordinates.size(); i++) {
             latLngs.add(new LatLng(coordinates.get(i).getLatitude(), coordinates.get(i).getLongitude()));
         }
-        googleMap.clear();
-        if (latLngs.size() > 1) {
-            googleMap.addPolyline(new PolylineOptions().addAll(latLngs).width(6f));
-            googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Начало"));
-            googleMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("Конец"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
-        } else if (latLngs.size() == 1) {
-            googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Точка"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
-            Toast.makeText(getContext(), R.string.only_one_coord, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), R.string.empty_coords, Toast.LENGTH_SHORT).show();
-        }
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.clear();
+                if (latLngs.size() > 1) {
+                    googleMap.addPolyline(new PolylineOptions().addAll(latLngs).width(6f));
+                    googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Начало"));
+                    googleMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("Конец"));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
+                } else if (latLngs.size() == 1) {
+                    googleMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Точка"));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(0), 10));
+                    Toast.makeText(getContext(), R.string.only_one_coord, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.empty_coords, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     public void setRecycleListItemChangeable(RecyclerListItemChangeable mRecyclerListItemChangeable) {
